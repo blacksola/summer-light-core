@@ -77,7 +77,7 @@ def getUserMenu(request):
             'i18n': 'menu.sys',
             'group': True,
             'hideInBreadcrumb': True,
-            'icon': { 'type': 'icon', 'value': 'appstore' },
+            'icon': { 'type': 'icon', 'value': 'setting' },
             'children': [
               {
                 'text': '用户管理',
@@ -291,7 +291,7 @@ def getI18n(request):
         "menu.sys.roleinfo": "角色详情",
         "menu.sys.gridster": "gridster插件",
         "menu.sys.sourcedata": "元数据管理",
-  "menu.sys.sourcedataedit": "元数据编辑"
+        "menu.sys.sourcedataedit": "元数据编辑"
     }
     return Response(sysI18n)
 

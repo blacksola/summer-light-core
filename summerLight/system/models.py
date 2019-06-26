@@ -54,3 +54,14 @@ class MenuRole(models.Model):
     update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='信息更新时间')
     remark = models.TextField(null=True, verbose_name='备注')
     options = models.TextField(null=True, verbose_name='额外配置')
+
+
+class I18n(models.Model):
+    id = models.CharField(primary_key=True, default=UUIDTools.uuid1_hex, editable=False, max_length=32)
+    language = models.CharField(null=True, max_length=32, verbose_name='语言类型')
+    code = models.CharField(null=True, max_length=32, verbose_name='语言代码')
+    value = models.CharField(null=True, max_length=32, verbose_name='语言代码对应的值')
+    desc = models.CharField(null=True, max_length=32, verbose_name='说明')
+    add_date = models.DateTimeField(auto_now_add=True, null=True, verbose_name='信息新增时间')
+    update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='信息更新时间')
+    options = models.TextField(null=True, verbose_name='额外配置')
