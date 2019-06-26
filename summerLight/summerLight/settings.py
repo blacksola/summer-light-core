@@ -25,7 +25,7 @@ SECRET_KEY = '_h%s3#tu0!%awjc^n3sw$)extl&qw@h2m*7bs^&rt-_7r2=l1#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -75,6 +75,7 @@ CORS_ALLOW_METHODS = (
 CORS_ALLOW_HEADERS = (
     'XMLHttpRequest',
     'X_FILENAME',
+    'accept',
     'accept-encoding',
     'authorization',
     'content-type',
@@ -85,6 +86,8 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'Pragma',
     'summer-light-token',
+    'sysinfo',
+    'SYSINFO',
 )
 
 ROOT_URLCONF = 'summerLight.urls'
