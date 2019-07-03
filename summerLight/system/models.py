@@ -65,3 +65,14 @@ class I18n(models.Model):
     add_date = models.DateTimeField(auto_now_add=True, null=True, verbose_name='信息新增时间')
     update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='信息更新时间')
     options = models.TextField(null=True, verbose_name='额外配置')
+
+class dict(models.Model):
+    id = models.CharField(primary_key=True, default=UUIDTools.uuid1_hex, editable=False, max_length=32)
+    code = models.TextField(null=True, verbose_name='代码')
+    name = models.TextField(null=True, verbose_name='名称')
+    value = models.TextField(null=True, verbose_name='值')
+    pid = models.TextField(null=True, verbose_name='父id')
+    desc = models.TextField(null=True, verbose_name='说明')
+    add_date = models.DateTimeField(auto_now_add=True, null=True, verbose_name='信息新增时间')
+    update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='信息更新时间')
+    options = models.TextField(null=True, verbose_name='额外配置')

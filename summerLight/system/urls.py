@@ -12,8 +12,14 @@ urlpatterns = [
     url(r'^getMenuList$', views.getMenuList, name="menus-list"),
     url(r'^getMenuByUserId$', views.getMenuByUserId, name="user-menus-list"),
     url(r'^getMenuById$', views.getMenuById, name="menu-info"),
+    url(r'^getI18nList$', views.getI18nList, name="I18n-list"),
+    url(r'^getI18nInfo$', views.getI18nInfo, name="I18n-info"),
     # 登陆
     url(r'^userLogin$', views.userLogin, name="user-login"),
     url(r'^getUserMenu$', views.getUserMenu, name="get-user-menu"),
     url(r'^getI18n$', views.getI18n, name="get-i18n"),
+    url(r'^addValue$', views.addValue, name="add-value"),
+
+    # 其它
+    url(r'^initSourcedata$', views.initSourcedata, name="init-sourcedata"),
 ]
