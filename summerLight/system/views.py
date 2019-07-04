@@ -5,7 +5,7 @@ from system.serializer import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from system.models import *
-from common import sqlutils
+from common import sqlutils,utils
 
 @api_view(http_method_names=['GET'])
 def addValue(request):
@@ -15,6 +15,13 @@ def addValue(request):
   # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
+
+  # dict.objects.create(code='Sourcedata-Interface-Type', name='列表查询', value='queryinlist', pid='13dcb7ca9e2611e988d25076af3da2a3')
+  # dict.objects.create(code='Sourcedata-Interface-Type', name='表单查询', value='queryinform', pid='13dcb7ca9e2611e988d25076af3da2a3')
+  # dict.objects.create(code='Sourcedata-Interface-Type', name='新增', value='add', pid='13dcb7ca9e2611e988d25076af3da2a3')
+  # dict.objects.create(code='Sourcedata-Interface-Type', name='编辑', value='update', pid='13dcb7ca9e2611e988d25076af3da2a3')
+  # dict.objects.create(code='Sourcedata-Interface-Type', name='删除', value='delete', pid='13dcb7ca9e2611e988d25076af3da2a3')
+
   return Response({'msg': '结束'})
 
 @api_view(http_method_names=['GET'])
@@ -272,6 +279,21 @@ def getMenuByUserId(request):
     return Response({'total':130, 'list':serializer.data})
 
 @api_view(http_method_names=['GET'])
+def getDictItemByCode(request):
+    '''
+    根据code获取字典列表
+    '''
+    resultObj = utils.successMes()
+    dictCode = request.GET['code']
+    sqlSession = sqlutils.SqlUtils()
+    dictSql = f'''
+      SELECT * FROM system_dict WHERE "code" = '{dictCode}' AND "pid" <> '-1'
+    '''
+    dictList = sqlSession.getDictResult(dictSql)
+    resultObj['data'] = dictList
+    return Response(resultObj)
+
+@api_view(http_method_names=['GET'])
 def initSourcedata(request):
     sqlSession = sqlutils.SqlUtils()
     columns = sqlSession.getTableStructure('customer_customer')
@@ -306,7 +328,7 @@ def initSourcedata(request):
       "remark": "",
       "roptions": {
         "interface": [{
-          "type": "queryinpage",
+          "type": "queryinlist",
           "url": "/api/queryxxx"
         }],
         "listConfig": {

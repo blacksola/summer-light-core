@@ -22,4 +22,5 @@ urlpatterns = [
 
     # 其它
     url(r'^initSourcedata$', views.initSourcedata, name="init-sourcedata"),
+    url(r'^getDictItemByCode$', views.getDictItemByCode, name="get-dict-item-by-code"),
 ]
