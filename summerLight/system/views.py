@@ -15,12 +15,10 @@ def addValue(request):
   # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
-
-  # dict.objects.create(code='Sourcedata-Interface-Type', name='列表查询', value='queryinlist', pid='13dcb7ca9e2611e988d25076af3da2a3')
-  # dict.objects.create(code='Sourcedata-Interface-Type', name='表单查询', value='queryinform', pid='13dcb7ca9e2611e988d25076af3da2a3')
-  # dict.objects.create(code='Sourcedata-Interface-Type', name='新增', value='add', pid='13dcb7ca9e2611e988d25076af3da2a3')
-  # dict.objects.create(code='Sourcedata-Interface-Type', name='编辑', value='update', pid='13dcb7ca9e2611e988d25076af3da2a3')
-  # dict.objects.create(code='Sourcedata-Interface-Type', name='删除', value='delete', pid='13dcb7ca9e2611e988d25076af3da2a3')
+  # dict.objects.create(code='Gender', name='性别', pid='-1')
+  dict.objects.create(code='Gender', name='男', value='male', pid='41d9ed08a3b611e99f0c5076af3da2a6')
+  dict.objects.create(code='Gender', name='女', value='female', pid='41d9ed08a3b611e99f0c5076af3da2a6')
+  dict.objects.create(code='Gender', name='未知', value='unknow', pid='41d9ed08a3b611e99f0c5076af3da2a6')
 
   return Response({'msg': '结束'})
 
@@ -277,6 +275,22 @@ def getMenuByUserId(request):
     menus = Menu.objects.all()[:10]
     serializer = MenuSerializer(menus, many=True)
     return Response({'total':130, 'list':serializer.data})
+
+
+@api_view(http_method_names=['GET'])
+def getUserTables(request):
+    '''
+    获取数据库所有的表
+    '''
+    resultObj = utils.successMes()
+    sqlSession = sqlutils.SqlUtils()
+    dictSql = f'''
+      SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg%' AND tablename NOT LIKE 'sql_%' ORDER BY tablename
+    '''
+    dictList = sqlSession.getDictResult(dictSql)
+    resultObj['data'] = dictList
+    return Response(resultObj)
+
 
 @api_view(http_method_names=['GET'])
 def getDictItemByCode(request):

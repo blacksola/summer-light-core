@@ -22,5 +22,6 @@ urlpatterns = [
 
     # 其它
     url(r'^initSourcedata$', views.initSourcedata, name="init-sourcedata"),
-    url(r'^getDictItemByCode$', views.getDictItemByCode, name="get-dict-item-by-code"),
+    url(r'^getDictItemByCode$', views.getDictItemByCode, name="dict-item-by-code"),
+    url(r'^getUserTables$', views.getUserTables, name="user-tables"),
 ]
