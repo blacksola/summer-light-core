@@ -15,10 +15,10 @@ def addValue(request):
   # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
-  # dict.objects.create(code='Gender', name='性别', pid='-1')
-  dict.objects.create(code='Gender', name='男', value='male', pid='41d9ed08a3b611e99f0c5076af3da2a6')
-  dict.objects.create(code='Gender', name='女', value='female', pid='41d9ed08a3b611e99f0c5076af3da2a6')
-  dict.objects.create(code='Gender', name='未知', value='unknow', pid='41d9ed08a3b611e99f0c5076af3da2a6')
+  # dict.objects.create(code='YN', name='是否', pid='-1')
+  # dict.objects.create(code='YN', name='是', value='y', pid='1df60636a47a11e99db95076af3da2a3')
+  # dict.objects.create(code='YN', name='否', value='n', pid='1df60636a47a11e99db95076af3da2a3')
+  # dict.objects.create(code='Gender', name='未知', value='unknow', pid='41d9ed08a3b611e99f0c5076af3da2a6')
 
   return Response({'msg': '结束'})
 
@@ -318,21 +318,22 @@ def initSourcedata(request):
       columnInfo['field'] = col['column_name']
       columnInfo['label'] = ''
       if 'char' in col['column_name'] or 'text' in col['column_name']:
-        columnInfo['fieldType'] = 'string'
+        columnInfo['fieldType'] = 'char'
       elif 'int' in col['column_name'] or 'float' in col['column_name']:
         columnInfo['fieldType'] = 'number'
       elif 'time' in col['column_name'] or 'date' in col['column_name']:
         columnInfo['fieldType'] = 'date'
       else:
-        columnInfo['fieldType'] = 'string'
+        columnInfo['fieldType'] = 'char'
       if col['column_name'] == 'id':
-        columnInfo['primarykey'] = True
+        columnInfo['primaryKey'] = 'y'
+        columnInfo['label'] = '主键'
       else:
-        columnInfo['primarykey'] = False
-      columnInfo['controlType'] = ''
-      columnInfo['labelspan'] = 150
+        columnInfo['primaryKey'] = 'n'
+      columnInfo['controlType'] = 'text'
+      columnInfo['labelspan'] = 130
       columnInfo['dict'] = ''
-      columnInfo['dateformat'] = 'yyyy/MM/dd'
+      columnInfo['dateformat'] = 'YYYY/MM/DD'
       columnsInfo.append(columnInfo)
     tableinfo = {
       "id": "",
