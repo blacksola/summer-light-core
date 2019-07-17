@@ -4,8 +4,10 @@ from django.shortcuts import render
 from system.serializer import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.forms.models import model_to_dict
 from system.models import *
 from common import sqlutils,utils
+import json
 
 @api_view(http_method_names=['GET'])
 def addValue(request):
@@ -15,10 +17,11 @@ def addValue(request):
   # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
-  # dict.objects.create(code='YN', name='是否', pid='-1')
-  # dict.objects.create(code='YN', name='是', value='y', pid='1df60636a47a11e99db95076af3da2a3')
-  # dict.objects.create(code='YN', name='否', value='n', pid='1df60636a47a11e99db95076af3da2a3')
-  # dict.objects.create(code='Gender', name='未知', value='unknow', pid='41d9ed08a3b611e99f0c5076af3da2a6')
+  # dict.objects.create(code='Customer-Type', name='客户类型', pid='-1')
+  # dict.objects.create(code='Button-Layout', name='优质客户', value='l1', pid='3c4c96d2a76f11e996ac5076af3da2a3')
+  # dict.objects.create(code='Button-Layout', name='标准客户', value='l2', pid='3c4c96d2a76f11e996ac5076af3da2a3')
+  # dict.objects.create(code='Button-Layout', name='普通客户', value='l3', pid='3c4c96d2a76f11e996ac5076af3da2a3')
+  # dict.objects.create(code='Button-Layout', name='黑名单', value='l9', pid='3c4c96d2a76f11e996ac5076af3da2a3')
 
   return Response({'msg': '结束'})
 
@@ -92,11 +95,6 @@ def getUserMenu(request):
             'text': '仪表盘',
             'link': '/dashboard',
             'icon': { 'type': 'icon', 'value': 'appstore' },
-          },
-          {
-            'text': '快捷菜单',
-            'icon': { 'type': 'icon', 'value': 'rocket' },
-            'shortcutRoot': True,
           },
           {
             'text': '基础功能',
@@ -291,7 +289,6 @@ def getUserTables(request):
     resultObj['data'] = dictList
     return Response(resultObj)
 
-
 @api_view(http_method_names=['GET'])
 def getDictItemByCode(request):
     '''
@@ -309,50 +306,119 @@ def getDictItemByCode(request):
 
 @api_view(http_method_names=['GET'])
 def initSourcedata(request):
-    sqlSession = sqlutils.SqlUtils()
-    columns = sqlSession.getTableStructure('customer_customer')
-    sqlSession.closeConnect()
-    columnsInfo = []
-    for col in columns:
-      columnInfo = {}
-      columnInfo['field'] = col['column_name']
-      columnInfo['label'] = ''
-      if 'char' in col['column_name'] or 'text' in col['column_name']:
-        columnInfo['fieldType'] = 'char'
-      elif 'int' in col['column_name'] or 'float' in col['column_name']:
-        columnInfo['fieldType'] = 'number'
-      elif 'time' in col['column_name'] or 'date' in col['column_name']:
-        columnInfo['fieldType'] = 'date'
-      else:
-        columnInfo['fieldType'] = 'char'
-      if col['column_name'] == 'id':
-        columnInfo['primaryKey'] = 'y'
-        columnInfo['label'] = '主键'
-      else:
-        columnInfo['primaryKey'] = 'n'
-      columnInfo['controlType'] = 'text'
-      columnInfo['labelspan'] = 130
-      columnInfo['dict'] = ''
-      columnInfo['dateformat'] = 'YYYY/MM/DD'
-      columnsInfo.append(columnInfo)
-    tableinfo = {
-      "id": "",
-      "tablename": "customer_customer",
-      "tabledesc": "",
-      "type": "",
-      "remark": "",
-      "roptions": {
-        "interface": [{
-          "type": "queryinlist",
-          "url": "/api/queryxxx"
-        }],
-        "listConfig": {
-          "columns": []
-        },
-        "formConfig": {
-          "columns": []
-        },
-        "columns": columnsInfo
-      }
+  '''
+  初始化元数据
+  '''
+  sqlSession = sqlutils.SqlUtils()
+  columns = sqlSession.getTableStructure('customer_customer')
+  sqlSession.closeConnect()
+  columnsInfo = []
+  for col in columns:
+    columnInfo = {}
+    columnInfo['field'] = col['column_name']
+    columnInfo['label'] = ''
+    if columnInfo['field'] == 'name':
+      columnInfo['label'] = '名称'
+    if columnInfo['field'] == 'sub_name':
+      columnInfo['label'] = '简称'
+    if columnInfo['field'] == 'address':
+      columnInfo['label'] = '地址'
+    if columnInfo['field'] == 'type':
+      columnInfo['label'] = '类型'
+    if columnInfo['field'] == 'tags':
+      columnInfo['label'] = '标签'
+    if columnInfo['field'] == 'phone':
+      columnInfo['label'] = '电话'
+    if columnInfo['field'] == 'email':
+      columnInfo['label'] = '邮箱'
+    if columnInfo['field'] == 'web_site':
+      columnInfo['label'] = '网址'
+    if columnInfo['field'] == 'level':
+      columnInfo['label'] = '等级'
+    if columnInfo['field'] == 'status':
+      columnInfo['label'] = '状态'
+    if 'char' in col['column_name'] or 'text' in col['column_name']:
+      columnInfo['fieldType'] = 'char'
+    elif 'int' in col['column_name'] or 'float' in col['column_name']:
+      columnInfo['fieldType'] = 'number'
+    elif 'time' in col['column_name'] or 'date' in col['column_name']:
+      columnInfo['fieldType'] = 'date'
+    else:
+      columnInfo['fieldType'] = 'char'
+    if col['column_name'] == 'id':
+      columnInfo['primaryKey'] = 'y'
+      columnInfo['label'] = '主键'
+    else:
+      columnInfo['primaryKey'] = 'n'
+    columnInfo['controlType'] = 'text'
+    columnInfo['labelspan'] = 130
+    columnInfo['dict'] = ''
+    columnInfo['dateformat'] = 'YYYY/MM/DD'
+    columnsInfo.append(columnInfo)
+  tableinfo = {
+    "id": "",
+    "tablename": "customer_customer",
+    "tabledesc": "",
+    "type": "table",
+    "tablestatus": "enable",
+    "remark": "",
+    "roptions": {
+      "interface": [{
+        "type": "queryinlist",
+        "url": "/api/queryxxx"
+      }],
+      "listConfig": {
+        "columns": []
+      },
+      "formConfig": {
+        "columns": []
+      },
+      "columns": columnsInfo
     }
-    return Response(tableinfo)
+  }
+  return Response(tableinfo)
+
+@api_view(http_method_names=['POST'])
+def saveSourceData(request):
+    '''
+    保存元数据
+    '''
+    resultObj = utils.successMes()
+    obj = request.data['params']
+    if 'id' in obj and len(obj['id']) > 1:
+      row = sourceData.objects.get(id="724ccd8aa7b511e9935b5076af3da2a3")
+      row.tablename=obj['tablename']
+      row.tabledesc=obj['tabledesc']
+      row.tablestatus=obj['tablestatus']
+      row.type=obj['type']
+      row.remark=obj['remark']
+      row.roptions=json.dumps(obj['roptions'])
+      row.save()
+    else:
+      sourceData.objects.create(tablename=obj['tablename'], tabledesc=obj['tabledesc'], 
+                      tablestatus=obj['tablestatus'], type=obj['type'], remark=obj['remark'],
+                      roptions=json.dumps(obj['roptions']))
+    resultObj['data'] = resultObj
+    resultObj['interface-type'] = 'save'
+    return Response(resultObj)    
+
+@api_view(http_method_names=['GET'])
+def getSourceData(request):
+  '''
+  函数说明
+  '''
+  resultObj = utils.successMes()
+  try:
+    sqlSession = sqlutils.SqlUtils()
+    row = sourceData.objects.get(id="724ccd8aa7b511e9935b5076af3da2a3")
+    resultData = model_to_dict(row)
+    resultData['roptions'] = json.loads(resultData['roptions'])
+    resultData['id'] = row.id
+    resultObj['data'] = resultData
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    if sqlSession:
+      sqlSession.closeConnect()
+  return Response(resultObj)
