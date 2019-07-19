@@ -309,6 +309,7 @@ def initSourcedata(request):
   '''
   初始化元数据
   '''
+  resultObj = utils.successMes()
   sqlSession = sqlutils.SqlUtils()
   columns = sqlSession.getTableStructure('customer_customer')
   sqlSession.closeConnect()
@@ -368,15 +369,18 @@ def initSourcedata(request):
         "url": "/api/queryxxx"
       }],
       "listConfig": {
+        "base": {},
         "columns": []
       },
       "formConfig": {
+        "base": {},
         "columns": []
       },
       "columns": columnsInfo
     }
   }
-  return Response(tableinfo)
+  resultObj['data'] = tableinfo
+  return Response(resultObj)
 
 @api_view(http_method_names=['POST'])
 def saveSourceData(request):
