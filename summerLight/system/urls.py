@@ -27,5 +27,6 @@ urlpatterns = [
     # 元数据
     url(r'^initSourcedata$', views.initSourcedata, name="init-sourcedata"),
     url(r'^getSourceData$', views.getSourceData, name="get-sourceData"),
+    url(r'^getAllSourcedata$', views.getAllSourcedata, name="get-all-sourcedata"),
     url(r'^saveSourceData$', views.saveSourceData, name="save-sourcedata"),
 ]

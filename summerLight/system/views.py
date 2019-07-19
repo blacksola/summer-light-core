@@ -305,6 +305,36 @@ def getDictItemByCode(request):
     return Response(resultObj)
 
 @api_view(http_method_names=['GET'])
+def getAllSourcedata(request):
+  '''
+  获取元数据配置列表
+  '''
+  resultObj = utils.successMes()
+  try:
+    pageSize = request.GET['pageSize']
+    pageNum = int(request.GET['pageNum'])-1
+    sortColumn = request.GET['sort']
+    whereStr = ''
+    sqlSession = sqlutils.SqlUtils()
+    querySql = f'''
+      SELECT "id", "tablename", "tabledesc", "tablestatus", "type", "remark", "add_date", "update_date" 
+      FROM system_sourcedata {whereStr} ORDER BY {sortColumn} LIMIT {pageSize} OFFSET {pageNum}
+    '''
+    listData = sqlSession.getDictResult(querySql)
+    total = sqlSession.getTotal(querySql)
+    resultObj['data'] = {
+      'list': listData,
+      'total': total
+    }
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    if sqlSession:
+      sqlSession.closeConnect()
+  return Response(resultObj)
+
+@api_view(http_method_names=['GET'])
 def initSourcedata(request):
   '''
   初始化元数据
@@ -402,8 +432,8 @@ def saveSourceData(request):
       sourceData.objects.create(tablename=obj['tablename'], tabledesc=obj['tabledesc'], 
                       tablestatus=obj['tablestatus'], type=obj['type'], remark=obj['remark'],
                       roptions=json.dumps(obj['roptions']))
-    resultObj['data'] = resultObj
-    resultObj['interface-type'] = 'save'
+    resultObj['data'] = ''
+    resultObj['interfaceType'] = 'save'
     return Response(resultObj)    
 
 @api_view(http_method_names=['GET'])
