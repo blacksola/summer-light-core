@@ -17,8 +17,7 @@ def addValue(request):
   # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
   # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
-  # dict.objects.create(code='Customer-Type', name='客户类型', pid='-1')
-  # dict.objects.create(code='Button-Layout', name='优质客户', value='l1', pid='3c4c96d2a76f11e996ac5076af3da2a3')
+  # dict.objects.create(code='Table-RowHeight', name='表格高', pid='-1')
   # dict.objects.create(code='Button-Layout', name='标准客户', value='l2', pid='3c4c96d2a76f11e996ac5076af3da2a3')
   # dict.objects.create(code='Button-Layout', name='普通客户', value='l3', pid='3c4c96d2a76f11e996ac5076af3da2a3')
   # dict.objects.create(code='Button-Layout', name='黑名单', value='l9', pid='3c4c96d2a76f11e996ac5076af3da2a3')
@@ -312,13 +311,14 @@ def getAllSourcedata(request):
   resultObj = utils.successMes()
   try:
     pageSize = request.GET['pageSize']
-    pageNum = int(request.GET['pageNum'])-1
-    sortColumn = request.GET['sort']
+    pageIndex = int(request.GET['pageIndex'])-1
+    sortField = request.GET['sortField']
+    sortOrder = request.GET['sortOrder']
     whereStr = ''
     sqlSession = sqlutils.SqlUtils()
     querySql = f'''
       SELECT "id", "tablename", "tabledesc", "tablestatus", "type", "remark", "add_date", "update_date" 
-      FROM system_sourcedata {whereStr} ORDER BY {sortColumn} LIMIT {pageSize} OFFSET {pageNum}
+      FROM system_sourcedata {whereStr} ORDER BY {sortField} {sortOrder} LIMIT {pageSize} OFFSET {pageIndex}
     '''
     listData = sqlSession.getDictResult(querySql)
     total = sqlSession.getTotal(querySql)
@@ -444,7 +444,7 @@ def getSourceData(request):
   resultObj = utils.successMes()
   try:
     sqlSession = sqlutils.SqlUtils()
-    row = sourceData.objects.get(id="724ccd8aa7b511e9935b5076af3da2a3")
+    row = sourceData.objects.get(id=str(request.GET['id']))
     resultData = model_to_dict(row)
     resultData['roptions'] = json.loads(resultData['roptions'])
     resultData['id'] = row.id
