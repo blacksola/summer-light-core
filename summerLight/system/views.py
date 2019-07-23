@@ -334,14 +334,15 @@ def getAllSourcedata(request):
       sqlSession.closeConnect()
   return Response(resultObj)
 
-@api_view(http_method_names=['GET'])
+@api_view(http_method_names=['POST'])
 def initSourcedata(request):
   '''
   初始化元数据
   '''
+  initInfo = request.data['initInfo']
   resultObj = utils.successMes()
   sqlSession = sqlutils.SqlUtils()
-  columns = sqlSession.getTableStructure('customer_customer')
+  columns = sqlSession.getTableStructure(initInfo['selectTable'])
   sqlSession.closeConnect()
   columnsInfo = []
   for col in columns:
@@ -388,16 +389,12 @@ def initSourcedata(request):
     columnsInfo.append(columnInfo)
   tableinfo = {
     "id": "",
-    "tablename": "customer_customer",
-    "tabledesc": "",
+    "tablename": initInfo['selectTable'],
+    "tabledesc": initInfo['desc'],
     "type": "table",
     "tablestatus": "enable",
     "remark": "",
     "roptions": {
-      "interface": [{
-        "type": "queryinlist",
-        "url": "/api/queryxxx"
-      }],
       "listConfig": {
         "base": {},
         "columns": []
@@ -409,6 +406,10 @@ def initSourcedata(request):
       "columns": columnsInfo
     }
   }
+  row = sourceData.objects.create(tablename=initInfo['selectTable'], tabledesc=initInfo['desc'], 
+                      tablestatus='enable', type='table', remark='备注、、、、、、备注',
+                      roptions=json.dumps(tableinfo['roptions']))
+  tableinfo['id'] = row.id
   resultObj['data'] = tableinfo
   return Response(resultObj)
 
@@ -434,6 +435,7 @@ def saveSourceData(request):
                       roptions=json.dumps(obj['roptions']))
     resultObj['data'] = ''
     resultObj['interfaceType'] = 'save'
+    resultObj['msg'] = '保存成功'
     return Response(resultObj)    
 
 @api_view(http_method_names=['GET'])
