@@ -421,7 +421,7 @@ def saveSourceData(request):
     resultObj = utils.successMes()
     obj = request.data['params']
     if 'id' in obj and len(obj['id']) > 1:
-      row = sourceData.objects.get(id="724ccd8aa7b511e9935b5076af3da2a3")
+      row = sourceData.objects.get(id=obj['id'])
       row.tablename=obj['tablename']
       row.tabledesc=obj['tabledesc']
       row.tablestatus=obj['tablestatus']
@@ -441,7 +441,7 @@ def saveSourceData(request):
 @api_view(http_method_names=['GET'])
 def getSourceData(request):
   '''
-  函数说明
+  根据id获取元数据配置
   '''
   resultObj = utils.successMes()
   try:
@@ -451,6 +451,33 @@ def getSourceData(request):
     resultData['roptions'] = json.loads(resultData['roptions'])
     resultData['id'] = row.id
     resultObj['data'] = resultData
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    if sqlSession:
+      sqlSession.closeConnect()
+  return Response(resultObj)
+
+@api_view(http_method_names=['POST'])
+def getDataByDataSourceConfig(request):
+  '''
+  根据元数据配置获取业务数据
+  '''
+  resultObj = utils.successMes()
+  try:
+    configs = request.data['params']
+    tableName = configs['tablename']
+    sqlSession = sqlutils.SqlUtils()
+    querySql = f'''
+      SELECT * FROM {tableName}
+    '''
+    listData = sqlSession.getDictResult(querySql)
+    total = sqlSession.getTotal(querySql)
+    resultObj['data'] = {
+      'list': listData,
+      'total': total
+    }
   except Exception as e:
     resultObj = utils.errorMes(e)
     print(e)

@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^getSourceData$', views.getSourceData, name="get-sourceData"),
     url(r'^getAllSourcedata$', views.getAllSourcedata, name="get-all-sourcedata"),
     url(r'^saveSourceData$', views.saveSourceData, name="save-sourcedata"),
+    url(r'^getDataByDataSourceConfig$', views.getDataByDataSourceConfig, name="getData-by-dataSourceConfig"),
 ]
