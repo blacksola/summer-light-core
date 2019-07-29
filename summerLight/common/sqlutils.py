@@ -133,6 +133,8 @@ class SqlUtils:
     def __init__(self, dbType='default', dbId='', connInfo={}):
         self.kind = 'pgsql'
         self.dbUrl = 'postgresql://sola:a@123456B@pgm-bp1kyk50ab84p141eo.pg.rds.aliyuncs.com:3432/summerlight'
+        if dbType == 'mysql':
+            self.dbUrl = 'mysql+pymysql://sola:a@123456B@129.204.88.98:3306/incontrol'
         self.connect()
 
 

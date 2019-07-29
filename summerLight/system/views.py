@@ -485,3 +485,33 @@ def getDataByDataSourceConfig(request):
     if sqlSession:
       sqlSession.closeConnect()
   return Response(resultObj)
+  
+@api_view(http_method_names=['GET'])
+def getTables(request):
+  '''
+  根据id获取元数据配置
+  '''
+  resultObj = utils.successMes()
+  try:
+    sqlSession = sqlutils.SqlUtils(dbType='mysql')
+    sqlStr = f'''
+    SELECT
+      table_name,
+      table_type,
+      `ENGINE`
+    FROM
+      information_schema. TABLES
+    WHERE
+      table_schema = 'incontrol'
+    ORDER BY
+      table_name DESC
+    '''
+    rows = sqlSession.getDictResult(sqlStr)
+    resultObj['data'] = rows
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    if sqlSession:
+      sqlSession.closeConnect()
+  return Response(resultObj)
