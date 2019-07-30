@@ -1,7 +1,8 @@
 def errorMes(mes):
     errObj = {
         "data": {},
-        "status": "failure"
+        "msg": "failure",
+        "code": "1",
     }
     if mes is not None:
         errObj['data'] = mes
@@ -11,6 +12,7 @@ def errorMes(mes):
 def successMes():
     successObj = {
         "data": {},
-        "status": "success"
+        "msg": "success",
+        "code": "0",
     }
     return successObj;
