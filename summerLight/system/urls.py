@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^getDictItemByCode$', views.getDictItemByCode, name="dict-item-by-code"),
     url(r'^getUserTables$', views.getUserTables, name="user-tables"),
     url(r'^getTables$', views.getTables, name="getTables"),
+    url(r'^getIncontrolUsers$', views.getIncontrolUsers, name="get-Incontrol-Users"),
 
     # 元数据
     url(r'^initSourcedata$', views.initSourcedata, name="init-sourcedata"),

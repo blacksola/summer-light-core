@@ -14,9 +14,9 @@ def addValue(request):
   '''
   新增数据
   '''
-  # I18n.objects.create(language='zh-cn', code='menu.sys.org.list', value='组织机构')
-  # I18n.objects.create(language='zh-tw', code='menu.sys.org.list', value='组织机构')
-  # I18n.objects.create(language='en-us', code='menu.sys.org.list', value='organization')
+  # I18n.objects.create(language='zh-CN', code='rw.incontrol.actions.reset', value='重置')
+  # I18n.objects.create(language='zh-TW', code='rw.incontrol.actions.reset', value='重置')
+  # I18n.objects.create(language='en-US', code='rw.incontrol.actions.reset', value='reset')
   # dict.objects.create(code='Table-RowHeight', name='表格高', pid='-1')
   # dict.objects.create(code='Button-Layout', name='标准客户', value='l2', pid='3c4c96d2a76f11e996ac5076af3da2a3')
   # dict.objects.create(code='Button-Layout', name='普通客户', value='l3', pid='3c4c96d2a76f11e996ac5076af3da2a3')
@@ -508,6 +508,30 @@ def getTables(request):
     '''
     rows = sqlSession.getDictResult(sqlStr)
     resultObj['data'] = rows
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    if sqlSession:
+      sqlSession.closeConnect()
+  return Response(resultObj)
+
+@api_view(http_method_names=['POST'])
+def getIncontrolUsers(request):
+  '''
+  获取用户信息
+  '''
+  resultObj = utils.successMes()
+  try:
+    sqlSession = sqlutils.SqlUtils(dbType='mysql')
+    querySql = '''
+      SELECT *
+      FROM sys_user ORDER BY MODIFYDATE LIMIT 10 OFFSET 1
+    '''
+    listData = sqlSession.getDictResult(querySql)
+    total = sqlSession.getTotal(querySql)
+    resultObj['records'] = listData
+    resultObj['total'] = total
   except Exception as e:
     resultObj = utils.errorMes(e)
     print(e)
