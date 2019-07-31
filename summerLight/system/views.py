@@ -526,9 +526,9 @@ def getIncontrolUsers(request):
     sqlSession = sqlutils.SqlUtils(dbType='mysql')
     querySql = '''
       SELECT *
-      FROM sys_user ORDER BY MODIFYDATE LIMIT 15 OFFSET 1
+      FROM sys_user ORDER BY MODIFYDATE 
     '''
-    listData = sqlSession.getDictResult(querySql)
+    listData = sqlSession.getDictResult(querySql + ' LIMIT 15 OFFSET 1')
     total = sqlSession.getTotal(querySql)
     resultObj['records'] = listData
     resultObj['total'] = total['total']
