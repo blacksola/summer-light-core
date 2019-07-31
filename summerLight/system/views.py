@@ -531,7 +531,7 @@ def getIncontrolUsers(request):
     listData = sqlSession.getDictResult(querySql)
     total = sqlSession.getTotal(querySql)
     resultObj['records'] = listData
-    resultObj['total'] = total.total
+    resultObj['total'] = total['total']
   except Exception as e:
     resultObj = utils.errorMes(e)
     print(e)
