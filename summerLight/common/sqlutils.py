@@ -57,7 +57,7 @@ class SqlUtils:
             except Exception as error:
                 # columnNames.append(col[0])
                 colName = col[0]
-            columnNames.append(colName)
+            columnNames.append(colName.lower())
 
         columnNames = tuple(columnNames)#需要转tuple
         res = list.fetchall()
