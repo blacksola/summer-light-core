@@ -173,6 +173,11 @@ def getUserMenu(request):
                 'i18n': 'menu.sys.org.list',
                 'link': '/sys/orglist',
               },
+              {
+                'text': '数据字典',
+                'i18n': 'menu.sys.dict.list',
+                'link': '/sys/dictlist',
+              },
             ],
           },
         ],
