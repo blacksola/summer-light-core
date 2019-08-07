@@ -178,6 +178,11 @@ def getUserMenu(request):
                 'i18n': 'menu.sys.dict.list',
                 'link': '/sys/dictlist',
               },
+              {
+                'text': '模块管理',
+                'i18n': 'menu.sys.module.list',
+                'link': '/sys/modulelist',
+              },
             ],
           },
         ],
