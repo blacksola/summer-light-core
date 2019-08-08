@@ -88,6 +88,8 @@ CORS_ALLOW_HEADERS = (
     'summer-light-token',
     'sysinfo',
     'SYSINFO',
+    'incontrol-token',
+    'INCONTROL-TOKEN',
 )
 
 ROOT_URLCONF = 'summerLight.urls'
