@@ -100,7 +100,7 @@ def getUserMenu(request):
             'i18n': 'menu.base',
             'group': True,
             'hideInBreadcrumb': True,
-            'icon': { 'type': 'icon', 'value': 'appstore' },
+            'icon': { 'type': 'icon', 'value': 'wallet' },
             'children': [
               {
                 'text': '客户列表',
