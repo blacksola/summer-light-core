@@ -76,7 +76,7 @@ def getUserMenu(request):
     # print(request.META)
     userMenu = {
         'app': {
-            'name': 'ng-alain-rw',
+            'name': 'in-control-rw',
             'description': 'Ng-zorro admin panel front-end framework',
         },
         'user': {
