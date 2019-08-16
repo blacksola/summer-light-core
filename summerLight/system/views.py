@@ -8,7 +8,8 @@ from django.forms.models import model_to_dict
 from system.models import *
 from common import sqlutils,utils
 import json
-
+import logging
+logger = logging.getLogger('summerLight')
 @api_view(http_method_names=['GET'])
 def addValue(request):
   '''
@@ -73,6 +74,9 @@ def getUserMenu(request):
     '''
     获取菜单
     '''
+    logger.debug('debug-----------------------------------qweqwe3453')
+    logger.info('info-----------------------------------qweqwe1123')
+    logger.error('error-----------------------------------qweqwe678')
     # print(request.META)
     userMenu = {
         'app': {

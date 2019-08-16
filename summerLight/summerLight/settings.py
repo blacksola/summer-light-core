@@ -174,3 +174,51 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'debugfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/debug.log',
+            'when': 'D', # daily, you can use 'midnight' as well
+            'backupCount': 700, # 100 days backup
+            'formatter': 'standard',
+        },        
+        'infofile': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/info.log',
+            'when': 'D', # daily, you can use 'midnight' as well
+            'backupCount': 700, # 100 days backup
+            'formatter': 'standard',
+        },        
+        'errorfile': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/error.log',
+            'when': 'D', # daily, you can use 'midnight' as well
+            'backupCount': 700, # 100 days backup
+            'formatter': 'standard',
+        },        
+    },
+    'loggers': {      
+        'django': {
+            'handlers': ['debugfile', 'infofile', 'errorfile'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },               
+        'summerLight': {
+            'handlers': ['debugfile', 'infofile', 'errorfile'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },               
+    }
+}
