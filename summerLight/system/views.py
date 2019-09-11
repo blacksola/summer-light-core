@@ -1,14 +1,18 @@
-from django.shortcuts import render
-
-# Create your views here.
-from system.serializer import *
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.forms.models import model_to_dict
-from system.models import *
-from common import sqlutils,utils
 import json
 import logging
+# Create your views here.
+import urllib.parse
+import urllib.request
+
+from django.forms.models import model_to_dict
+from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from common import sqlutils, utils
+from system.models import *
+from system.serializer import *
+
 logger = logging.getLogger('summerLight')
 @api_view(http_method_names=['GET'])
 def addValue(request):
@@ -553,3 +557,167 @@ def getIncontrolUsers(request):
     if sqlSession:
       sqlSession.closeConnect()
   return Response(resultObj)
+
+@api_view(http_method_names=['POST'])
+def doWxLogin(request):
+  resultObj = utils.successMes()
+  try:
+    obj = request.data['code']
+    data = urllib.parse.urlencode({'appid': 'wx351b6e0935ab0156', 'secret': '02d1893f939b1fbd4160991b34112945', 'js_code':str(obj),'grant_type':'authorization_code'})
+    response = urllib.request.urlopen('https://api.weixin.qq.com/sns/jscode2session?%s' % data)
+    html = response.read()
+    returnMsg = html.decode('utf-8')
+    print(returnMsg)
+    resultObj['records'] = returnMsg;
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    pass
+  return Response(resultObj)
+
+@api_view(http_method_names=['POST'])
+def getBillList(request):
+  resultObj = utils.successMes()
+  try:
+    obj = request.data['codes']
+    billList = [{
+        'addressName': '我家',
+        'amount': '600',
+        'amountSymbol': '￥',
+        'waterRate': {
+          'name': '水费-浦东新区 2019年8月',
+          'amount': 35.98,
+          'showDetail': False,
+          'start': 230,
+          'end': 260,
+        },
+        'propertyCosts': {
+          'name': '物业费-浦东新区  2019年8月',
+          'amount': 1170,
+          'showDetail': False,
+          'detail': [{
+              'name': '物业费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾处置费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾清运费',
+              'amount': 5
+            },
+            {
+              'name': '路灯费',
+              'amount': 0.45
+            },
+            {
+              'name': '电梯服务费',
+              'amount': 35.26
+            },
+            {
+              'name': '房租',
+              'amount': 67.25
+            }
+          ]
+        }
+      },
+      {
+        'addressName': '父母家',
+        'amount': '500',
+        'amountSymbol': '￥',
+        'waterRate': {
+          'name': '水费-浦东新区 2019年8月',
+          'amount': 35.98,
+          'showDetail': False,
+          'start': 230,
+          'end': 260,
+        },
+        'propertyCosts': {
+          'name': '物业费-浦东新区  2019年8月',
+          'amount': 1170,
+          'showDetail': False,
+          'detail': [{
+              'name': '物业费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾处置费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾清运费',
+              'amount': 5
+            },
+            {
+              'name': '路灯费',
+              'amount': 0.45
+            },
+            {
+              'name': '电梯服务费',
+              'amount': 35.26
+            },
+            {
+              'name': '房租',
+              'amount': 67.25
+            }
+          ]
+        }
+      },
+      {
+        'addressName': '张飞家',
+        'amount': '1170',
+        'amountSymbol': '￥',
+        'waterRate': {},
+        'propertyCosts': {
+          'name': '物业费-浦东新区  2019年8月',
+          'amount': 1170,
+          'showDetail': False,
+          'detail': [{
+              'name': '物业费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾处置费',
+              'amount': 8
+            },
+            {
+              'name': '垃圾清运费',
+              'amount': 5
+            },
+            {
+              'name': '路灯费',
+              'amount': 0.45
+            },
+            {
+              'name': '电梯服务费',
+              'amount': 35.26
+            },
+            {
+              'name': '房租',
+              'amount': 67.25
+            }
+          ]
+        }
+      },
+      {
+        'addressName': '段誉家',
+        'amount': '35.98',
+        'amountSymbol': '￥',
+        'waterRate': {
+          'name': '水费-浦东新区 2019年8月',
+          'amount': 35.98,
+          'showDetail': False,
+          'start': 230,
+          'end': 260,
+        },
+        'propertyCosts': {}
+      }
+    ]
+    resultObj['data'] = billList
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+  finally:
+    return Response(resultObj)
+  

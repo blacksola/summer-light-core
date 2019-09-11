@@ -32,4 +32,8 @@ urlpatterns = [
     url(r'^getAllSourcedata$', views.getAllSourcedata, name="get-all-sourcedata"),
     url(r'^saveSourceData$', views.saveSourceData, name="save-sourcedata"),
     url(r'^getDataByDataSourceConfig$', views.getDataByDataSourceConfig, name="getData-by-dataSourceConfig"),
+
+    # 测试
+    url(r'^doWxLogin$', views.doWxLogin, name="do-wx-login"),
+    url(r'^getBillList$', views.getBillList, name="bill-list"),
 ]
