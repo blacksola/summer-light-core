@@ -36,4 +36,6 @@ urlpatterns = [
     # 测试
     url(r'^doWxLogin$', views.doWxLogin, name="do-wx-login"),
     url(r'^getBillList$', views.getBillList, name="bill-list"),
+    url(r'^getAPI$', views.getAPI, name="get-API"),
+    url(r'^postAPI$', views.postAPI, name="post-API"),
 ]

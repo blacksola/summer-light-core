@@ -721,3 +721,38 @@ def getBillList(request):
   finally:
     return Response(resultObj)
   
+@api_view(http_method_names=['GET'])
+def getAPI(request):
+  '''
+  函数说明
+  '''
+  resultObj = utils.successMes()
+  try:
+    # sqlSession = sqlutils.SqlUtils()
+    resultObj['data'] = {'msg': '结束'}
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    pass
+    # if sqlSession:
+    #   sqlSession.closeConnect()
+  return Response(resultObj)
+
+@api_view(http_method_names=['POST'])
+def postAPI(request):
+  '''
+  函数说明
+  '''
+  resultObj = utils.successMes()
+  try:
+    # sqlSession = sqlutils.SqlUtils()
+    resultObj['data'] = {'msg': '结束'}
+  except Exception as e:
+    resultObj = utils.errorMes(e)
+    print(e)
+  finally:
+    pass
+    # if sqlSession:
+    #   sqlSession.closeConnect()
+  return Response(resultObj)
